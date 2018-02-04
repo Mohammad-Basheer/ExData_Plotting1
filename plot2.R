@@ -1,0 +1,16 @@
+library(lubridate)
+library(ggplot2)
+AllData <- read.table("household_power_consumption.txt", header = TRUE , sep = ";")
+Feb2007Days2 <- subset(AllData, dmy(AllData$Date) == dmy("01-02-2007") | dmy(AllData$Date) == dmy("02-02-2007"))
+rm(AllData)
+Feb2007Days2$Global_active_power <- as.numeric(as.character(Feb2007Days2$Global_active_power))
+Feb2007Days2$Date <- dmy(Feb2007Days2$Date)
+
+DateTime <- paste(Feb2007Days2$Date, Feb2007Days2$Time)
+DateTime <-strptime(DateTime, "%Y-%m-%d %H:%M:%S")
+dev.set(2)
+par(mfcol = c(1,1))
+plot(DateTime,Feb2007Days2$Global_active_power, type = "l", xlab = "", ylab = "Global Active power (kilowatts)")
+
+dev.copy(png, file = "plot2.png")
+dev.off()
